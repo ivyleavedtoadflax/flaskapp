@@ -2,7 +2,7 @@
 Simple flask app
 """
 import os
-from flask import Flask
+from flask import Flask, jsonify
 import pandas as pd
 from sqlalchemy import create_engine
 
@@ -25,9 +25,13 @@ def hello():
 
     data = pd.read_sql('SELECT * FROM user', ENGINE)
 
-    # Convert to string and return
+    # Convert to a json
+
+    response = data.to_json()
+
+    # Return the json and a 200 (ok) response
     
-    return str(data)
+    return response, 200
 
 @app.route('/foo', methods=['GET'])
 def hello1():
