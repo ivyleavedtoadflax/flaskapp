@@ -3,25 +3,31 @@ Simple flask app
 """
 import os
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+import pandas as pd
+from sqlalchemy import create_engine
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
-
-db = SQLAlchemy(app)
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-
-    def __repr__(self):
-        return '<User %r>' % self.username
+# Set up a route for the base url
 
 @app.route('/', methods=['GET'])
 def hello():
-    return "Hello World!"
+
+    # Get the database address from env vars
+
+    db_string = os.getenv('DATABASE_URL')
+
+    # Create connection
+
+    ENGINE = create_engine(db_string, echo=True)
+
+    # Run simple query on database
+
+    data = pd.read_sql('SELECT * FROM user', ENGINE)
+
+    # Convert to string and return
+    
+    return str(data)
 
 @app.route('/foo', methods=['GET'])
 def hello1():
