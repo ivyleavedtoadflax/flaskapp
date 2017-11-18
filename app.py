@@ -23,7 +23,7 @@ def hello():
 
     # Run simple query on database
 
-    data = pd.read_sql('SELECT * FROM user', ENGINE)
+    data = pd.read_sql('SELECT * FROM test', ENGINE)
 
     # Convert to a json
 
