@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+    {% block body %}
+    <h1>Upload new File</h1>
+    <h2>Accepts csv, json, or txt files only.</h2>
+    <form method=post enctype=multipart/form-data>
+      <p><input type=file name=file>
+         <input type=submit value=Upload>
+    </form>
+{% endblock %}
