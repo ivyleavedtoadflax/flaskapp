@@ -26,11 +26,17 @@ ALLOWED_EXTENSIONS = set(['txt', 'csv', 'json'])
 
 # Demonstrate access to an attached database using sqlalchemy and pandas
 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['POST'])
 def return_json_from_db():
     """
     Access the test table on postgres and return
     """
+
+    values = request.get_json()
+    print(str(values))
+    strings = values.get('strings')
+    if strings is None:
+        return "Error: Please supply a valid string", 400
 
     # Get the database address from env vars
 
@@ -40,9 +46,13 @@ def return_json_from_db():
 
     engine = create_engine(db_string, echo=True)
 
-    # Run simple query on database
+    # Construct simple query
 
-    data = pd.read_sql('SELECT * FROM test', engine)
+    query = f"SELECT * FROM test WHERE SOUNDEX(name) = SOUNDEX('{strings}')"
+
+    # Run simple query on database
+    
+    data = pd.read_sql(query, engine)
 
     # Convert to a json
 
