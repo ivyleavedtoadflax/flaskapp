@@ -103,13 +103,28 @@ def upload_file():
 
 # Render the file back to the user.
 
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
+@app.route('/data')
+def data():
     """
     Render uploaded file as a new webpage
     """
-    return send_from_directory(app.config['UPLOAD_FOLDER'],
-                               filename)
+    db_string = os.getenv('DATABASE_URL')
+
+    # Create connection
+
+    engine = create_engine(db_string, echo=True)
+
+    # Construct simple query
+
+    query = f"SELECT * FROM test"
+
+    # Run simple query on database
+    
+    data = pd.read_sql(query, engine)
+
+    # Convert to a json
+
+    return str(data)
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
