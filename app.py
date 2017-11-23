@@ -126,5 +126,12 @@ def data():
 
     return str(data)
 
+@app.route('/alex', methods=['GET'])
+def data():
+    """
+    Render uploaded file as a new webpage
+    """
+    return "Hello World!"
+
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
