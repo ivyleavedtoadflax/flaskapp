@@ -7,7 +7,7 @@ from flask import (Flask, request, redirect, url_for, send_from_directory,
 import pandas as pd
 from sqlalchemy import create_engine
 from werkzeug.utils import secure_filename
-
+from testscript import test_function
 app = Flask(__name__)
 
 # Set the location where uploaded files will be stored (/tmp/ is probably ok)
@@ -127,11 +127,12 @@ def data():
     return str(data)
 
 @app.route('/alex', methods=['GET'])
-def data():
+def alex():
     """
     Render uploaded file as a new webpage
     """
-    return "Hello World!"
+    foo = test_function()
+    return foo
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
