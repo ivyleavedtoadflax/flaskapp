@@ -62,77 +62,69 @@ def return_json_from_db():
 
     return response, 200
 
-def allowed_file(filename):
-    """
-    Check that the selected file is allowed
-
-    :param filename: <string> Filename of local file to be uploaded
-    :return: <boolean> True if filename is valid and extension is in
-     ALLOWED_EXTENSIONS, else False.
-    """
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+#def allowed_file(filename):
+#    """
+#    Check that the selected file is allowed
+#
+#    :param filename: <string> Filename of local file to be uploaded
+#    :return: <boolean> True if filename is valid and extension is in
+#     ALLOWED_EXTENSIONS, else False.
+#    """
+#    return '.' in filename and \
+#           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # Demonstrate an example of how to upload files to the server.
 
-@app.route('/upload', methods=['GET', 'POST'])
-def upload_file():
-    """
-    Upload a file using a simple form
-    """
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash(u'No file part', 'error')
-            return redirect(request.url)
-        selected_file = request.files['file']
-        # if user does not select file, browser also
-        # submit a empty part without filename
-        if selected_file.filename == '':
-            flash(u'No selected file', 'error')
-            return redirect(request.url)
-        if selected_file and not allowed_file(selected_file.filename):
-            flash(u'File is not of authorised type', 'error')
-            return redirect(request.url)
-        if selected_file and allowed_file(selected_file.filename):
-            filename = secure_filename(selected_file.filename)
-            selected_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('uploaded_file',
-                                    filename=filename))
-    return render_template('upload.html')
+#@app.route('/upload', methods=['GET', 'POST'])
+#def upload_file():
+#    """
+#    Upload a file using a simple form
+#    """
+#    if request.method == 'POST':
+#        # check if the post request has the file part
+#        if 'file' not in request.files:
+#            flash(u'No file part', 'error')
+#            return redirect(request.url)
+#        selected_file = request.files['file']
+#        # if user does not select file, browser also
+#        # submit a empty part without filename
+#        if selected_file.filename == '':
+#            flash(u'No selected file', 'error')
+#            return redirect(request.url)
+#        if selected_file and not allowed_file(selected_file.filename):
+#            flash(u'File is not of authorised type', 'error')
+#            return redirect(request.url)
+#        if selected_file and allowed_file(selected_file.filename):
+#            filename = secure_filename(selected_file.filename)
+#            selected_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+#            return redirect(url_for('uploaded_file',
+#                                    filename=filename))
+#    return render_template('upload.html')
 
 # Render the file back to the user.
 
-@app.route('/data')
-def data():
-    """
-    Render uploaded file as a new webpage
-    """
-    db_string = os.getenv('DATABASE_URL')
-
-    # Create connection
-
-    engine = create_engine(db_string, echo=True)
-
-    # Construct simple query
-
-    query = f"SELECT * FROM test"
-
-    # Run simple query on database
-    
-    data = pd.read_sql(query, engine)
-
-    # Convert to a json
-
-    return str(data)
-
-@app.route('/alex', methods=['GET'])
-def alex():
-    """
-    Render uploaded file as a new webpage
-    """
-    foo = test_function()
-    return foo
+#@app.route('/data')
+#def data():
+#    """
+#    Render uploaded file as a new webpage
+#    """
+#    db_string = os.getenv('DATABASE_URL')
+#
+#    # Create connection
+#
+#    engine = create_engine(db_string, echo=True)
+#
+#    # Construct simple query
+#
+#    query = f"SELECT * FROM test"
+#
+#    # Run simple query on database
+#    
+#    data = pd.read_sql(query, engine)
+#
+#    # Convert to a json
+#
+#    return str(data)
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
